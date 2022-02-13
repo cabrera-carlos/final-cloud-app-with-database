@@ -1,11 +1,11 @@
   applications:
   - name: onlinecourse
     routes:
-      - route: host.domain
+      - route: crcabrera.eu-gb.mybluemix.net
     memory: 128M
     buildpack: python_buildpack
   - name: onlinecourse-nginx
     routes:
-      - route: host.domain/static
+      - route: crcabrera.eu-gb.mybluemix.net/static
     memory: 128M
     buildpack: staticfile_buildpack
