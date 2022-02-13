@@ -51,52 +51,41 @@
                 {% endfor %}
             </div>
             <!-- Task: show questions and choices -->
-            <!-- <HINT> Use Bootstrap Collapse to hide exam first, more details could be found here
-            https://www.w3schools.com/bootstrap4/bootstrap_collapse.asp-->
+            
 
-            <!--
-
-            A collapse example here:
-            <div id="exam" class="collapse">
-                Click to expand elements within the collapse div
-                </div>
-
-            -->
-
-            <!-- <HINT> If user is authenticated, show course exam with a list of question -->
-
-            <!-- <HINT> Each example will have many questions -->
-
-            <!-- <HINT> Each question will have many choices -->
-
-
-            <!-- <HINT> Create a form to collect the selected choices for all questions -->
-            <!-- <HINT> For each question choice, you may create a checkbox input like
-            <input type="check" name="choice_{{choice.id}}" id="{{choice.id}}" ...>
-            -->
-
-            <!-- A choice submission form example
-            <form id="questionform" action="point to a submit view" method="post">
-                        ... for each question in the course ...
-                        <div class="card mt-1">
-                            <div class="card-header"><h5>{{ question.question_text}}</h5></div>
-                            {% csrf_token %}
-                            <div class="form-group">
-                               ... for each choice in the question ...
-                                <div class="form-check">
-                                    <label class="form-check-label">
-                                        <input type="checkbox" name="choice_{{choice.id}}"
-                                               class="form-check-input" id="{{choice.id}}"
-                                               value="{{choice.id}}">{{ choice.choice_text }}
-                                    </label>
+            {% if user.is_authenticated %}
+                <button data-toggle="collapse" data-target="#exam" class="btn btn-primary btn-block">Start Exam</button>
+                <div id="exam" class="collapse">
+                    
+                    <form id="question_form" action="{% url 'onlinecourse:course_submit' course.id %}" method="post">
+                        {% for question in course.question_set.all %}
+                            <div class="card mt-1">
+                                <div class="card-header"><h5>{{ question.question_text}}</h5></div>
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {% for choice in question.choice_set.all %}
+                                        <div class="form-check">
+                                            <input  type="checkbox" class="form-check-input" 
+                                                    id="{{ choice.id }}" name="choice_{{choice.id}}" 
+                                                    value="{{choice.id}}">
+                                            <label class="form-check-label" for="choice_{{choice.id}}">
+                                                {{ choice.choice_text }}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
                                 </div>
                             </div>
-                        </div>
-                    <input class="btn btn-success btn-block" type="submit" value="Submit">
-            </form> -->
+                        {% endfor %}
 
-            <!--Check here to see more details Bootstrap checkbox
-             https://www.w3schools.com/bootstrap4/bootstrap_forms_inputs.asp-->
+                        <input class="btn btn-success btn-block" type="submit" value="Submit">
+                    </form>    
+
+                </div> 
+                
+            {% else %}
+                <p>You need to authenticate to take an exam</p>
+            {% endif %}
+
     </div>
 </body>
 </html>
